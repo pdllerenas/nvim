@@ -7,7 +7,7 @@ return {
     local config = require("nvim-treesitter.configs")
 
 
-    vim.keymap.set('n', '<C-n>', ':Neotree filesystem reveal right <CR>', {})
+    vim.keymap.set('n', '<C-n>', ':Neotree filesystem toggle right <CR>', {})
     config.setup({
     ensure_installed = {"lua", "cpp"},
     highlight = { enable = true },
