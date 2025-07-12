@@ -27,5 +27,7 @@ vim.cmd([[
                 inoremap {;<CR> {<CR>};<ESC>O
                 ]])
 
+vim.keymap.set('i', '<C-l>', '<C-o>A;', {})
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
