@@ -24,6 +24,24 @@ return {
       lspconfig.clangd.setup({
         capabilities = capabilities,
       })
+      lspconfig.texlab.setup({
+        setting = {
+          texlab = {
+            build = {
+              executable = "latexmk",
+              args = {"-pdf", "-interaction=nonstopmode", "-synctex=1", "%f"},
+              onSave=true,
+              forwardSeachAfter=true,
+
+            },
+            forwardSearch = {
+              executable = "zathura",
+              args = {"--synctex-forward", "%l:1:%f", "%p"},
+            },
+            auxDirectoy = ".",
+          }
+        }
+      })
       vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
       vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})

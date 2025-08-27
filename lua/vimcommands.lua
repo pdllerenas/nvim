@@ -10,11 +10,11 @@ local map = vim.api.nvim_set_keymap
 local opts = { noremap = true, silent = true }
 
 -- Simple bracket/quote pairs
-map("i", '"', '""', { noremap = true })
-map("i", "'", "''", { noremap = true })
-map("i", "(", "()", { noremap = true })
-map("i", "[", "[]", { noremap = true })
-map("i", "{", "{}", { noremap = true })
+map("i", '"', '""', { noremap = false })
+map("i", "'", "''", { noremap = false })
+map("i", "(", "()", { noremap = false })
+map("i", "[", "[]", { noremap = false })
+map("i", "{", "{}", { noremap = false })
 
 -- Press left after inserting pair
 vim.cmd([[
@@ -28,6 +28,7 @@ vim.cmd([[
                 ]])
 
 vim.keymap.set('i', '<C-l>', '<C-o>A;', {})
+vim.keymap.set("i", "<C-b>", "<C-o>A {<CR>}<C-o>O", {})
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
