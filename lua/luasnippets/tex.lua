@@ -50,4 +50,27 @@ return {
       i(1),
     })
   ),
+
+  require("luasnip").snippet(
+    {
+      trig = "@bnmat",
+      dscr = "nxn matrix",
+      wordTrig = false,
+      priority = 1100,
+      snippetType = "autosnippet",
+    },
+    fmta([[
+\begin{bmatrix}
+	<> & \cdots & <> \\
+	\vdots & \ddots & \vdots \\
+	<> & \cdots & <>
+\end{bmatrix}
+]],
+    {
+      i(1, "a_{11}"),
+      i(2, "a_{1n}"),
+      i(3, "a_{n1}"),
+      i(4, "a_{nn}")
+    })
+  ),
 }
