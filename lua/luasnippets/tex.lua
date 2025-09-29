@@ -53,24 +53,40 @@ return {
 
   require("luasnip").snippet(
     {
+      trig = "@ps",
+      dscr = "texttt",
+      wordTrig = false,
+      priority = 1100,
+      snippetType = "autosnippet",
+    },
+    fmta("\\begin{problem}\n\t<>\n\\end{problem}\n\\begin{solution}\n\t<>\n\\end{solution}", {
+      i(1),
+      i(2),
+    })
+  ),
+
+  require("luasnip").snippet(
+    {
       trig = "@bnmat",
       dscr = "nxn matrix",
       wordTrig = false,
       priority = 1100,
       snippetType = "autosnippet",
     },
-    fmta([[
+    fmta(
+      [[
 \begin{bmatrix}
 	<> & \cdots & <> \\
 	\vdots & \ddots & \vdots \\
 	<> & \cdots & <>
 \end{bmatrix}
 ]],
-    {
-      i(1, "a_{11}"),
-      i(2, "a_{1n}"),
-      i(3, "a_{n1}"),
-      i(4, "a_{nn}")
-    })
+      {
+        i(1, "a_{11}"),
+        i(2, "a_{1n}"),
+        i(3, "a_{n1}"),
+        i(4, "a_{nn}"),
+      }
+    )
   ),
 }
