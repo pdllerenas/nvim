@@ -20,7 +20,7 @@ return {
 	),
 	s({ trig = "mla" },
 		fmta([[
-#set page(header: context align(right)[Franklin #counter(page).get().first()])
+#set page(header: context align(right)[Pedro #counter(page).get().first()])
 
 Pedro D. Llerenas
 

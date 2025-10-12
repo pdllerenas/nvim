@@ -30,6 +30,8 @@ vim.pack.add({
 	{ src = "https://github.com/LinArcX/telescope-env.nvim" },
 	{ src = "https://github.com/nvim-telescope/telescope.nvim",          version = "0.1.8" },
 	{ src = "https://github.com/nvim-lua/plenary.nvim" },
+	{ src = "https://github.com/hrsh7th/nvim-cmp.git" },
+	{ src = "https://github.com/hrsh7th/cmp-nvim-lsp.git" },
 })
 
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -91,8 +93,7 @@ require("oil").setup({
 })
 require "vague".setup({ transparent = true })
 
-
-vim.lsp.enable({ "lua_ls", "tinymist" })
+vim.lsp.enable({ "lua_ls", "tinymist", "clangd" })
 vim.keymap.set('n', '<leader>lf', vim.lsp.buf.format)
 
 vim.lsp.config("lua_ls", {
@@ -105,9 +106,50 @@ vim.lsp.config("lua_ls", {
 	}
 })
 
+vim.lsp.config("clangd", {
+	settings = {
+		Clangd = {
+			workspace = {
+				library = vim.api.nvim_get_runtime_file("", true),
+			}
+		}
+	}
+})
+
 vim.cmd("colorscheme vague")
 require("luasnip").setup({ enable_autosnippets = true })
 require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/snippets/" })
+require("cmp").setup({
+	config = function()
+		local cmp = require("cmp")
+		require("luasnip.loaders.from_vscode").lazy_load()
+		cmp.setup({
+			snippet = {
+				-- REQUIRED - you must specify a snippet engine
+				expand = function(args)
+					require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
+				end,
+			},
+			window = {
+				completion = cmp.config.window.bordered(),
+				-- documentation = cmp.config.window.bordered(),
+			},
+			mapping = cmp.mapping.preset.insert({
+				["<C-b>"] = cmp.mapping.scroll_docs(-4),
+				["<C-f>"] = cmp.mapping.scroll_docs(4),
+				["<C-Space>"] = cmp.mapping.complete(),
+				["<C-e>"] = cmp.mapping.abort(),
+				["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+			}),
+			sources = cmp.config.sources({
+				{ name = "nvim_lsp" },
+				{ name = "luasnip" },
+			}, {
+				{ name = "buffer" },
+			}),
+		})
+	end,
+})
 
 local ls = require("luasnip")
 local builtin = require("telescope.builtin")
@@ -130,14 +172,16 @@ map({ 'n', 'v', 'x' }, '<leader>d', '"+d<CR>')
 map({ 'n', 'v', 'x' }, '<leader>s', ':e #<CR>')
 map({ 'n', 'v', 'x' }, '<leader>S', ':sf #<CR>')
 map({ 'n', 'v', 'x' }, '<leader>n', ':norm ', { desc = 'ENTER NORM COMMAND.' })
+map("n", "K", vim.lsp.buf.hover, { buffer = 0, desc = "Show documentation in hover window." })
 
 
+map("n", "gd", vim.lsp.buf.definition, {})
 map({ "i", "s" }, "<C-e>", function() ls.expand_or_jump(1) end, { silent = true })
 map({ "i", "s" }, "<C-J>", function() ls.jump(1) end, { silent = true })
 map({ "i", "s" }, "<C-K>", function() ls.jump(-1) end, { silent = true })
 
 map({ "n" }, "<leader>f", builtin.find_files, { desc = "Telescope live grep" })
-map({ "n" }, "<leader>g", builtin.live_grep, { desc = "Telescope live grep" })
+map({ "n" }, "<leader>lg", builtin.live_grep, { desc = "Telescope live grep" })
 map({ "n" }, "<leader>b", builtin.buffers, { desc = "Telescope buffers" })
 map({ "n" }, "<leader>si", builtin.grep_string, { desc = "Telescope live string" })
 map({ "n" }, "<leader>so", builtin.oldfiles, { desc = "Telescope buffers" })
@@ -154,5 +198,8 @@ map('n', '<leader>e', ":Oil<CR>")
 
 map('n', '<C-u>', "<C-u>zz")
 map('n', '<C-d>', "<C-d>zz")
+
+map('i', '<C-l>', '<C-o>A;', {})
+map("i", "<C-b>", "<C-o>A {<CR>}<C-o>O", {})
 
 vim.cmd(":hi statusline guibg=NONE")
