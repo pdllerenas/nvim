@@ -72,7 +72,7 @@ require("actions-preview").setup {
 
 require "mini.pick".setup()
 require "nvim-treesitter.configs".setup({
-	ensure_installed = { "c", "lua", "markdown", "cpp", "python" },
+	ensure_installed = { "c", "lua", "markdown", "cpp", "python", "typst"},
 	highlight = { enable = true },
 })
 require("oil").setup({
